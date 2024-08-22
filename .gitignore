@@ -3,6 +3,8 @@
 dist/
 
 # dependencies
+docker-compose.yml
+Dockerfile
 mongo_db/
 node_modules/
 .pnp.*

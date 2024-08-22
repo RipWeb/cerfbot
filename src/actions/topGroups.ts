@@ -6,8 +6,6 @@ export default async function topGroups(ctx: MyContext) {
   .sort({ totalDickLen: -1, _id: 1 })
   .limit(10);
 
-  console.log(topGroups)
-
   let text = '<b>Топ чатов 💬</b>\n\n';
   for (let i = 0; i < topGroups.length; i++){
     topGroups[i].username
@@ -16,5 +14,5 @@ export default async function topGroups(ctx: MyContext) {
   }
 
   if (ctx.chat)
-    await ctx.api.sendMessage(ctx.chat.id, text)
+    await ctx.api.sendMessage(ctx.chat.id, text, { link_preview_options: { is_disabled: true } })
 }

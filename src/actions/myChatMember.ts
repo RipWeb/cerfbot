@@ -6,7 +6,7 @@ export default async function myChatMember(ctx: MyContext) {
   const status =
     ctx.myChatMember?.new_chat_member.status !== "left" &&
     ctx.myChatMember?.new_chat_member.status !== "kicked"
-  console.log(status)
+
   if (ctx.chat?.type === "private")
     return User.updateOne({ id: ctx.from?.id }, { alive: status })
   else if (ctx.chat?.type === "group" || ctx.chat?.type === "supergroup") {

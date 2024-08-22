@@ -8,13 +8,13 @@ services:
       - ./mongo_db:/data/db
 
   app:
-    image: my-bot:latest
+    image: ripweb/my-bot:latest
     build: .
     restart: always
     environment:
-      TOKEN: 5590613650:AAGDWeQHSf4ZPhKaHGcsrB5tLA0vTjfVNT8
-      URI: mongodb://mongo_db:27017/cerfbot
-      USERNAME: c3rfbot
+      TOKEN: 7259950163:AAGuGWl_E_me9QPtW4MADGEOyh1KXyFJw1o
+      URI: mongodb://mongo_db:27017/my-bot
+      USERNAME: my2232bot
       ADMINS: "7371046616"
     depends_on:
       - mongo_db
