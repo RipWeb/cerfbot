@@ -5,26 +5,14 @@ export default async function topUsers(ctx: MyContext) {
   const topUsers = await User.find()
     .sort({ dick_len: -1 })
     .limit(10);
-  const user = await User.findOne({ id: ctx.from?.id });
+  const user: any = await User.findOne({ id: ctx.from?.id });
+  const rank = await User.countDocuments({ rating: { $gt: user.dick_len } }) + 1;
 
   let text = '<b>Топ пипис 🌟</b>\n\n';
-  for (let i = 0; i < topUsers.slice(0, 10).length; i++){
+  for (let i = 0; i < topUsers.length; i++){
     text += `<b>${i + 1}. <a href="tg://openmessage?user_id=${topUsers[i].id}">${topUsers[i].first_name}</a> | ${topUsers[i].dick_len} см. \n</b>`;
   }
-
-  if (user){
-    let rank = 1;   
-    for (let i = 0; i < topUsers.length; i++){
-      if (user.id === topUsers[i].id){
-        break;
-      }
-      if (user.dick_len > topUsers[i].dick_len){
-        break;
-      }
-      rank++;
-    }
-    text += `<b>\nВы: \n${rank}. <a href="tg://user?id=${user.id}">${user.first_name}</a> | ${user.dick_len} см. \n</b>`;
-  }
+  text += `<b>\nВы: \n${rank}. <a href="tg://user?id=${user.id}">${user.first_name}</a> | ${user.dick_len} см. \n</b>`;
 
   if (ctx.chat)
     await ctx.api.sendMessage(ctx.chat.id, text)
