@@ -12,7 +12,7 @@ services:
     build: .
     restart: always
     environment:
-      TOKEN: 7259950163:AAGuGWl_E_me9QPtW4MADGEOyh1KXyFJw1o
+      TOKEN: 5590613650:AAGDWeQHSf4ZPhKaHGcsrB5tLA0vTjfVNT8
       URI: mongodb://mongo_db:27017/my-bot
       USERNAME: my2232bot
       ADMINS: "7371046616"
