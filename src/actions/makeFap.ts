@@ -7,7 +7,8 @@ function getRandomNumber() {
 
 export default async function makeFap(ctx: MyContext) {
   const user: any = await User.findOne({ id: ctx.from?.id });
-  const rank = await User.countDocuments({ rating: { $gt: user.dick_len } }) + 1;
+  const rank = await User.countDocuments({ dick_len: { $gt: user.dick_len } }) + 1;
+  console.log(rank)
 
   const expDate = new Date(user.last_fap.getTime() + 24 * 60 * 60 * 1000);
   const curDate = new Date();

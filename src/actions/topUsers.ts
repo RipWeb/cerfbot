@@ -6,7 +6,7 @@ export default async function topUsers(ctx: MyContext) {
     .sort({ dick_len: -1 })
     .limit(10);
   const user: any = await User.findOne({ id: ctx.from?.id });
-  const rank = await User.countDocuments({ rating: { $gt: user.dick_len } }) + 1;
+  const rank = await User.countDocuments({ dick_len: { $gt: user.dick_len } }) + 1;
 
   let text = '<b>Топ пипис 🌟</b>\n\n';
   for (let i = 0; i < topUsers.length; i++){
