@@ -11,11 +11,8 @@ services:
     image: ripweb/my-bot:latest
     build: .
     restart: always
-    environment:
-      TOKEN: 7259950163:AAGuGWl_E_me9QPtW4MADGEOyh1KXyFJw1o
-      URI: mongodb://mongo_db:27017/cerfbot
-      USERNAME: my2232bot
-      ADMINS: "7371046616"
+    env_file:
+      - .env
     depends_on:
       - mongo_db
 
