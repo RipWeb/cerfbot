@@ -8,7 +8,7 @@ function getRandomNumber() {
 export default async function makeFap(ctx: MyContext) {
   const user = await User.findOne({ id: ctx.from?.id });
   const topUsers = await User.find()
-    .sort({ dick_len: -1, _id: 1})
+    .sort({ dick_len: -1 })
   
 
   if (user){
