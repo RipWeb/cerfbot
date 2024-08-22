@@ -16,7 +16,7 @@ export default async function topGroupUsers(ctx: MyContext) {
 
   let text = '<b>Топ пипис в чате 🦁</b>\n\n';
   for (let i = 0; i < topUsers.length; i++){
-    text += `<b>${i + 1}. <a href="tg://user?id=${topUsers[i].id}">${topUsers[i].first_name}</a> | ${topUsers[i].dick_len} см.\n</b>`;
+    text += `<b>${i + 1}. <a href="tg://openmessage?user_id=${topUsers[i].id}">${topUsers[i].first_name}</a> | ${topUsers[i].dick_len} см.\n</b>`;
   }
   if (ctx.chat)
     await ctx.api.sendMessage(ctx.chat.id, text)
