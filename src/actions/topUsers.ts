@@ -25,7 +25,6 @@ export default async function topUsers(ctx: MyContext) {
     }
     text += `<b>\nВы: \n${rank}. <a href="tg://user?id=${user.id}">${user.first_name}</a> | ${user.dick_len} см. \n</b>`;
   }
-  const end: any = new Date();
 
   if (ctx.chat)
     await ctx.api.sendMessage(ctx.chat.id, text)
