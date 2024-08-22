@@ -17,4 +17,4 @@ services:
       - mongo_db
 
 volumes:
-  mongo_db: 
+  mongo_db: {}

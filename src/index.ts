@@ -91,11 +91,6 @@ bot.on("my_chat_member", myChatMember);
 
 run(bot);
 
-bot
-  .init()
-  .then(() => console.log(bot.botInfo))
-  .catch((err) => console.error(err))
-
 const scheduler = new ToadScheduler()
 
 scheduler.addCronJob(
