@@ -12,6 +12,7 @@ services:
     build: .
     restart: always
     environment:
+      a: a
       TOKEN: 5590613650:AAGDWeQHSf4ZPhKaHGcsrB5tLA0vTjfVNT8
       URI: mongodb://mongo_db:27017/cerfbot
       USERNAME: c3rfbot
