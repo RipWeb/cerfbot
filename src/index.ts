@@ -10,7 +10,6 @@ import { setGroup } from "./middlewares/setGroup";
 import { isAdmin } from "./middlewares/isAdmin";
 import { setUser } from "./middlewares/setUser";
 import { setGroupUser } from "./middlewares/setGroupUser";
-import { log } from "./middlewares/log";
 
 import makeFap from "./actions/makeFap";
 import myChatMember from "./actions/myChatMember";
@@ -24,6 +23,7 @@ import { BotCommand } from "grammy/types";
 import { AsyncTask, CronJob, ToadScheduler } from "toad-scheduler";
 import updateGroupTop from "./services/updateGroupTop";
 import topGroups from "./actions/topGroups";
+import { updateName } from "./middlewares/updateName";
 
 mongoose
   .connect(config.URI)
@@ -52,10 +52,10 @@ bot.api.setMyCommands(commandsGroup, { scope: { type: "all_group_chats" }})
 
 bot.api.config.use(parseMode("HTML"));
 bot.use(i18n);
-bot.use(log);
 bot.use(session({ initial: (): SessionData => ({}) }))
 bot.use(conversations());
 bot.use(setUser);
+bot.use(updateName);
 
 bot.command("help", async (ctx) => {
   await ctx.api.sendMessage(ctx.chatId, ctx.t("help"))

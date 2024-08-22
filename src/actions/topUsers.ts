@@ -4,7 +4,7 @@ import { User } from "../models/user";
 export default async function topUsers(ctx: MyContext) {
   const topUsers = await User.find()
     .sort({ dick_len: -1, _id: 1 });
-    const user = await User.findOne({ id: ctx.from?.id });
+  const user = await User.findOne({ id: ctx.from?.id });
 
   let text = '<b>Топ пипис 🌟</b>\n\n';
   for (let i = 0; i < topUsers.slice(0, 10).length; i++){
