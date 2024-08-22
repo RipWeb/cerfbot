@@ -1,0 +1,23 @@
+
+services:
+  mongo_db:
+    container_name: database_container
+    image: mongo:latest
+    restart: always
+    volumes:
+      - ./mongo_db:/data/db
+
+  app:
+    image: ripweb/my-bot:latest
+    build: .
+    restart: always
+    environment:
+      TOKEN: 7259950163:AAGuGWl_E_me9QPtW4MADGEOyh1KXyFJw1o
+      URI: mongodb://mongo_db:27017/cerfbot
+      USERNAME: my2232bot
+      ADMINS: "7371046616"
+    depends_on:
+      - mongo_db
+
+volumes:
+  mongo_db: 
