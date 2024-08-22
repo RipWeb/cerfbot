@@ -3,7 +3,8 @@ import { User } from "../models/user";
 
 export default async function topUsers(ctx: MyContext) {
   const topUsers = await User.find()
-    .sort({ dick_len: -1, _id: 1 });
+    .sort({ dick_len: -1 })
+    .limit(10);
   const user = await User.findOne({ id: ctx.from?.id });
 
   let text = '<b>Топ пипис 🌟</b>\n\n';
@@ -24,6 +25,7 @@ export default async function topUsers(ctx: MyContext) {
     }
     text += `<b>\nВы: \n${rank}. <a href="tg://user?id=${user.id}">${user.first_name}</a> | ${user.dick_len} см. \n</b>`;
   }
+  const end: any = new Date();
 
   if (ctx.chat)
     await ctx.api.sendMessage(ctx.chat.id, text)
