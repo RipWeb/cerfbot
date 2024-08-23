@@ -23,7 +23,7 @@ export default async function makeFap(ctx: MyContext) {
   const timeDif = calcTimeDif(curDate, expDate);
   const growth = getRandomNumber();
   const resMsg = curDate > expDate || user.charge > 0
-    ? ctx.t("growMsg", { name: `<a href="tg://user?id=${ctx.from?.id}">${ctx.from?.first_name}</a>`, len: user.dick_len + growth, growth: growth, time: timeDif })
+    ? ctx.t("growMsg", { name: `<a href="tg://user?id=${ctx.from?.id}">${ctx.from?.first_name}</a>`, len: user.dick_len + growth, growth: growth })
     : ctx.t("cdMsg", { name: `<a href="tg://user?id=${ctx.from?.id}">${ctx.from?.first_name}</a>`, len: user.dick_len, place: rank, time: timeDif });
   if (curDate > expDate) {
     await User.updateOne({ id: ctx.from?.id }, { $inc: { dick_len: growth }, $set: { last_fap: curDate } })
