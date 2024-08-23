@@ -8,6 +8,8 @@ const userSchema = new Schema({
   id: { index: true, required: true, type: Number, unique: true },
   username: String,
   first_name: String,
+  group_count: { default: 0, type: Number},
+  charge: { default: 0, type: Number},
   ref_name: { default: null, type: String},
   alive: { default: true, type: Boolean},
   dick_len: { default: 1, type: Number},

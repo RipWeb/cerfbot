@@ -24,6 +24,7 @@ import { AsyncTask, CronJob, ToadScheduler } from "toad-scheduler";
 import updateGroupTop from "./services/updateGroupTop";
 import topGroups from "./actions/topGroups";
 import { updateName } from "./middlewares/updateName";
+import profile from "./actions/profile";
 
 mongoose
   .connect(config.URI)
@@ -31,31 +32,37 @@ mongoose
   .catch((err) => console.log(err));
 
 const i18n = new I18n<MyContext>({
-    defaultLocale: "ru",
-    directory: "src/locales",
-  });
+  defaultLocale: "ru",
+  directory: "src/locales",
+});
 
 const commandsPrivate: BotCommand[] = [
-    { command: "start", description: "🎲 Играть"},
-    { command: "help", description: "📖 Помощь" },
-  ];
+  { command: "start", description: "играть" },
+  { command: "help", description: "помощь" },
+  { command: "profile", description: "профиль" },
+];
 
 const commandsGroup: BotCommand[] = [
-    { command: "global_top", description: "🌍 Глобальный топ"},
-    { command: "top_dick", description: "⚜️ Топ этой группы" },
-    { command: "top_groups", description: "💬 Топ групп" },
-  ];
+  { command: "dick", description: "растить пипису" },
+  { command: "global_top", description: "глобальный топ" },
+  { command: "top_dick", description: "топ этого чата" },
+  { command: "top_groups", description: "топ чатов" },
+  { command: "profile", description: "профиль" },
+];
 
 const bot = new Bot<MyContext>(config.TOKEN);
-bot.api.setMyCommands(commandsPrivate, { scope: { type: "all_private_chats" }})
-bot.api.setMyCommands(commandsGroup, { scope: { type: "all_group_chats" }})
+bot.api.setMyCommands(commandsPrivate, { scope: { type: "all_private_chats" } })
+bot.api.setMyCommands(commandsGroup, { scope: { type: "all_group_chats" } })
 
 bot.api.config.use(parseMode("HTML"));
 bot.use(i18n);
-bot.use(session({ initial: (): SessionData => ({}) }))
+bot.use(session({ initial: (): SessionData => ({ isFreshGroups: [] }) }))
 bot.use(conversations());
 bot.use(setUser);
 bot.use(updateName);
+bot.use(addRef);
+
+bot.command("profile", profile);
 
 bot.command("help", async (ctx) => {
   await ctx.api.sendMessage(ctx.chatId, ctx.t("help"))
@@ -63,14 +70,17 @@ bot.command("help", async (ctx) => {
 
 
 const privateBot = bot.chatType('private');
-privateBot.use(addRef);
 
 privateBot.command("start", async (ctx) => {
-  await ctx.api.sendMessage(ctx.chatId, ctx.t("start"), { reply_markup: keyboard })
+  await ctx.api.sendMessage(ctx.chatId, ctx.t("start"), { reply_markup: keyboard(ctx.from.id) })
+})
+
+privateBot.command("stat", async (ctx) => {
+  await ctx.api.sendMessage(ctx.chatId, ctx.t("start"), { reply_markup: keyboard(ctx.from.id) })
 })
 
 privateBot.on(":text", async (ctx) => {
-  await ctx.api.sendMessage(ctx.chatId, ctx.t("chatWarn"), { reply_markup: keyboard })
+  await ctx.api.sendMessage(ctx.chatId, ctx.t("chatWarn"), { reply_markup: keyboard(ctx.from.id) })
 })
 
 const groupBot = bot.chatType(['group', 'supergroup']);
@@ -78,8 +88,8 @@ groupBot.use(setGroup);
 groupBot.use(setGroupUser);
 
 groupBot.command("start", async (ctx) => {
-  await ctx.api.sendMessage(ctx.chatId, ctx.t("start"))
-})
+  await ctx.api.sendMessage(ctx.chatId, ctx.t("start"), { reply_markup: keyboard(ctx.from.id) })
+});
 
 groupBot.command("dick", makeFap);
 

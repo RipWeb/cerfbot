@@ -10,8 +10,6 @@ export default async function myChatMember(ctx: MyContext) {
   if (ctx.chat?.type === "private")
     return User.updateOne({ id: ctx.from?.id }, { alive: status })
   else if (ctx.chat?.type === "group" || ctx.chat?.type === "supergroup") {
-    if (status) await ctx.reply(ctx.t("start"))
-
     return Group.updateOne({ id: ctx.chat.id }, { alive: status })
   }
 }

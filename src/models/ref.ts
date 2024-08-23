@@ -12,6 +12,10 @@ const refSchema = new Schema(
     count: {
       default: 0,
       type: Number
+    },
+    countGroups: {
+      default: 0,
+      type: Number
     }
   }
 )
