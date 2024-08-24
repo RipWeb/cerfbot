@@ -25,6 +25,7 @@ import updateGroupTop from "./services/updateGroupTop";
 import topGroups from "./actions/topGroups";
 import { updateName } from "./middlewares/updateName";
 import profile from "./actions/profile";
+import { log } from "./middlewares/log";
 
 mongoose
   .connect(config.URI)
@@ -61,6 +62,7 @@ bot.use(conversations());
 bot.use(setUser);
 bot.use(updateName);
 bot.use(addRef);
+bot.use(log);
 
 bot.command("profile", profile);
 
