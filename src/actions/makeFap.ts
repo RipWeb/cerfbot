@@ -11,7 +11,7 @@ function calcTimeDif(date1: Date, date2: Date) {
   const minutes = Math.floor(difference / (1000 * 60) % 60);
   const hours = Math.floor(difference / (1000 * 60 * 60));
 
-  return `${hours}ч ${minutes}м ${seconds}с`;
+  return hours + "ч " + minutes + "м " + seconds + "с";
 }
 
 export default async function makeFap(ctx: MyContext) {
