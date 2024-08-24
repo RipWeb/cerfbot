@@ -26,6 +26,7 @@ import topGroups from "./actions/topGroups";
 import { updateName } from "./middlewares/updateName";
 import profile from "./actions/profile";
 import { log } from "./middlewares/log";
+import stat from "./actions/admin/stat";
 
 mongoose
   .connect(config.URI)
@@ -77,9 +78,7 @@ privateBot.command("start", async (ctx) => {
   await ctx.api.sendMessage(ctx.chatId, ctx.t("start"), { reply_markup: keyboard(ctx.from.id) })
 })
 
-privateBot.command("stat", async (ctx) => {
-  await ctx.api.sendMessage(ctx.chatId, ctx.t("start"), { reply_markup: keyboard(ctx.from.id) })
-})
+privateBot.command("stat", isAdmin, stat);
 
 privateBot.on(":text", async (ctx) => {
   await ctx.api.sendMessage(ctx.chatId, ctx.t("chatWarn"), { reply_markup: keyboard(ctx.from.id) })
