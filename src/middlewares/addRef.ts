@@ -41,7 +41,7 @@ export const addRef: Middleware<MyContext> = async (ctx, next) => {
     ctx.session.isFreshGroups = ctx.session.isFreshGroups?.filter((id) => id !== ctx.chat?.id);
     if (count === 1){
       await User.updateOne({ id: refCode }, { $inc: { group_count: count, charge: 1 } });
-      await ctx.api.sendMessage(refCode, "<b>+ 1 попытка за добавление бота в группу, добавляй бота в другие группы и получай больше попыток!</b>");
+      await ctx.api.sendMessage(refCode, "<b>+ 1 попытка за добавление бота в группу, добавляй бота в другие группы и получай больше попыток !</b>");
     }
   }
 }
