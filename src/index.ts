@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import { MyContext, SessionData } from "./typings/context";
 import config from "./typings/config";
 import { run } from "@grammyjs/runner";
+import { autoRetry } from "@grammyjs/auto-retry";
 
 import { setGroup } from "./middlewares/setGroup";
 import { isAdmin } from "./middlewares/isAdmin";
@@ -55,7 +56,10 @@ const commandsGroup: BotCommand[] = [
 const bot = new Bot<MyContext>(config.TOKEN);
 bot.api.setMyCommands(commandsPrivate, { scope: { type: "all_private_chats" } })
 bot.api.setMyCommands(commandsGroup, { scope: { type: "all_group_chats" } })
-
+bot.api.config.use(autoRetry({
+  maxRetryAttempts: 1, // only repeat requests once
+  maxDelaySeconds: 5, // fail immediately if we have to wait >5 seconds
+}));
 bot.api.config.use(parseMode("HTML"));
 bot.use(i18n);
 bot.use(session({ initial: (): SessionData => ({ isFreshGroups: [] }) }))

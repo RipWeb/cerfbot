@@ -5,6 +5,7 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
+    "@grammyjs/auto-retry": "^2.0.2",
     "@grammyjs/conversations": "^1.2.0",
     "@grammyjs/hydrate": "^1.4.1",
     "@grammyjs/i18n": "^1.0.2",
