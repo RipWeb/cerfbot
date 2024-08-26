@@ -6,7 +6,7 @@ export default async function topGroups(ctx: MyContext) {
   .sort({ totalDickLen: -1, _id: 1 })
   .limit(10);
 
-  let text = '<b>Топ чатов 💬</b>\n\n';
+  let text = '<b>топ чатов 💬</b>\n\n';
   for (let i = 0; i < topGroups.length; i++){
     topGroups[i].username
     ? text += `<b>${i + 1}. <a href="https://t.me/${topGroups[i].username}">${topGroups[i].title}</a> | ${topGroups[i].totalDickLen} см.\n</b>`

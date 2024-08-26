@@ -69,7 +69,7 @@ bot.use(
     limit: 2,
 
     onLimitExceeded: async (ctx) => {
-      await ctx.reply("Не так часто!");
+      await ctx.reply("не так часто!");
     },
 
     keyGenerator: (ctx) => {
