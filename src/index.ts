@@ -27,9 +27,9 @@ import updateGroupTop from "./services/updateGroupTop";
 import topGroups from "./actions/topGroups";
 import { updateName } from "./middlewares/updateName";
 import profile from "./actions/profile";
-import { log } from "./middlewares/log";
 import stat from "./actions/admin/stat";
 import { broadcastConservation, cancel_bc } from "./actions/admin/broadcast";
+import sliceTop from "./services/slice";
 
 mongoose
   .connect(config.URI, {enableUtf8Validation: false})
@@ -126,6 +126,9 @@ bot.on("my_chat_member", myChatMember);
 run(bot);
 
 const scheduler = new ToadScheduler()
+
+
+sliceTop(bot.api);
 
 scheduler.addCronJob(
   new CronJob(

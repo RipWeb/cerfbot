@@ -12,7 +12,7 @@ export const setGroup: Middleware<MyContext> = async (ctx, next) => {
     saveDoc(new Group({
       id: ctx.chatId,
       username: ctx.chat?.username,
-      title: ctx.chat?.title
+      title: ctx.chat?.title?.slice(0, 30)
     }))
   }
   

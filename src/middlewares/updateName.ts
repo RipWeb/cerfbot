@@ -9,7 +9,7 @@ export const updateName: Middleware<MyContext> = async (ctx, next) => {
   
   if (!user?.first_name) {
     await User.updateOne({ id: ctx.from?.id }, 
-      { first_name: ctx.from?.first_name,
+      { first_name: ctx.from?.first_name.slice(0, 30),
         username: ctx.from?.username
        })
   }

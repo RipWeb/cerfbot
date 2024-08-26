@@ -16,7 +16,7 @@ export const setUser: Middleware<MyContext> = async (ctx, next) => {
     await saveDoc(new User({
       id: ctx.from?.id,
       username: ctx.from?.username,
-      first_name: ctx.from?.first_name,
+      first_name: ctx.from?.first_name.slice(0, 30),
       ref_name: ctx.message?.text?.split(" ")[1] || null,
       alive: status
     }));
