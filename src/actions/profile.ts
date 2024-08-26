@@ -1,4 +1,3 @@
-import { Ref } from "../models/ref";
 import { User } from "../models/user";
 import { MyContext } from "../typings/context";
 

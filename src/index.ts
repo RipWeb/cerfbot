@@ -87,8 +87,6 @@ bot.use(updateName);
 bot.use(addRef);
 bot.use(createConversation(broadcastConservation));
 
-bot.command("profile", profile);
-
 bot.command("help", async (ctx) => {
   await ctx.api.sendMessage(ctx.chatId, ctx.t("help"))
 })
@@ -117,11 +115,11 @@ groupBot.command("start", async (ctx) => {
   await ctx.api.sendMessage(ctx.chatId, ctx.t("start"), { reply_markup: keyboard(ctx.from.id) })
 });
 
-groupBot.command("dick", makeFap);
-
-groupBot.command("global_top", topUsers);
-groupBot.command("top_dick", topGroupUsers);
-groupBot.command("top_groups", topGroups);
+groupBot.command("fap", makeFap);
+groupBot.command("gtop", topUsers);
+groupBot.command("top", topGroupUsers);
+groupBot.command("topchats", topGroups);
+groupBot.command("profile", profile);
 
 bot.on("my_chat_member", myChatMember);
 
