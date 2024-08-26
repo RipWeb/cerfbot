@@ -18,7 +18,7 @@ export default async function sliceTop(
   for (const group of groups) {
     if(group.title)
       if (group.title.length > 30){
-        await User.updateOne({ id: group.id }, { title: group.title.slice(0, 30) })
+        await Group.updateOne({ id: group.id }, { title: group.title.slice(0, 30) })
         console.log(group.title.slice(0, 30));
       }
   }
