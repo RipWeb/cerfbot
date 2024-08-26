@@ -32,7 +32,7 @@ import stat from "./actions/admin/stat";
 import { broadcastConservation, cancel_bc } from "./actions/admin/broadcast";
 
 mongoose
-  .connect(config.URI)
+  .connect(config.URI, {enableUtf8Validation: false})
   .then(() => console.log('MongoDB connected!'))
   .catch((err) => console.log(err));
 
