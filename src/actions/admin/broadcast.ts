@@ -6,6 +6,7 @@ import { Conversation } from "@grammyjs/conversations"
 let isAllowed = true;
 
 async function broadcast(ctx: MyContext, message_id: number) {
+  console.log(ctx)
   if (ctx.chat && ctx.from){
     const users = await User.find({ alive: true });
     let count = 0;
