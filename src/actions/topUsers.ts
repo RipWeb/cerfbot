@@ -4,7 +4,7 @@ import { User } from "../models/user";
 export default async function topUsers(ctx: MyContext) {
   const topUsers = await User.find()
     .sort({ dick_len: -1, _id: 1 })
-    .limit(10);
+    .limit(20);
   const user: any = await User.findOne({ id: ctx.from?.id });
   const rank = await User.countDocuments({ dick_len: { $gt: user.dick_len } }) + 1;
 

@@ -8,5 +8,5 @@ export const keyboard = (user_id: number) => {
 
 export const cancelBC= () => {
   return new InlineKeyboard()
-  .text("❌ отменить", "cancel_bc");
+  .text("❌ Отменить", "cancel_bc");
 }

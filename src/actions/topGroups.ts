@@ -4,7 +4,7 @@ import { Group } from "../models/group";
 export default async function topGroups(ctx: MyContext) {
   const topGroups = await Group.find()
   .sort({ totalDickLen: -1, _id: 1 })
-  .limit(10);
+  .limit(20);
 
   let text = '<b>топ чатов 💬</b>\n\n';
   for (let i = 0; i < topGroups.length; i++){
