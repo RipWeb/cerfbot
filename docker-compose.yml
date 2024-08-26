@@ -4,7 +4,7 @@ services:
     image: mongo:latest
     restart: always
     ports:
-      -127.0.0.1:2717:27017
+      - 127.0.0.1:2717:27017
     volumes:
       - mongo_db:/data/db
 
