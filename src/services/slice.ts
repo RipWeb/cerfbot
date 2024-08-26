@@ -10,7 +10,7 @@ export default async function sliceTop(
   for (const user of users) {
     if(user.first_name)
       if (user.first_name.length > 30){
-        await User.updateOne({ id: user.id }, { $set: { first_name: user.first_name.slice(0, 30) }})
+        await User.updateOne({ id: user.id }, { first_name: user.first_name.slice(0, 30) })
       }
   }
 
@@ -18,7 +18,8 @@ export default async function sliceTop(
   for (const group of groups) {
     if(group.title)
       if (group.title.length > 30){
-        await User.updateOne({ id: group.id }, { $set: { title: group.title.slice(0, 30) }})
+        await User.updateOne({ id: group.id }, { title: group.title.slice(0, 30) })
+        console.log(group.title.slice(0, 30));
       }
   }
   console.log('success slice!')
