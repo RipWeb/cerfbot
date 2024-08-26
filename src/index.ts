@@ -6,6 +6,7 @@ import { MyContext, SessionData } from "./typings/context";
 import config from "./typings/config";
 import { run } from "@grammyjs/runner";
 import { autoRetry } from "@grammyjs/auto-retry";
+import { limit } from "@grammyjs/ratelimiter";
 
 import { setGroup } from "./middlewares/setGroup";
 import { isAdmin } from "./middlewares/isAdmin";
@@ -28,6 +29,7 @@ import { updateName } from "./middlewares/updateName";
 import profile from "./actions/profile";
 import { log } from "./middlewares/log";
 import stat from "./actions/admin/stat";
+import { broadcastConservation, cancel_bc } from "./actions/admin/broadcast";
 
 mongoose
   .connect(config.URI)
@@ -46,10 +48,10 @@ const commandsPrivate: BotCommand[] = [
 ];
 
 const commandsGroup: BotCommand[] = [
-  { command: "dick", description: "растить пипису" },
-  { command: "global_top", description: "глобальный топ" },
-  { command: "top_dick", description: "топ этого чата" },
-  { command: "top_groups", description: "топ чатов" },
+  { command: "fap", description: "дрочить" },
+  { command: "top", description: "топ пипис чата" },
+  { command: "gtop", description: "глобальный топ" },
+  { command: "topchats", description: "топ чатов" },
   { command: "profile", description: "профиль" },
 ];
 
@@ -57,9 +59,25 @@ const bot = new Bot<MyContext>(config.TOKEN);
 bot.api.setMyCommands(commandsPrivate, { scope: { type: "all_private_chats" } })
 bot.api.setMyCommands(commandsGroup, { scope: { type: "all_group_chats" } })
 bot.api.config.use(autoRetry({
-  maxRetryAttempts: 1, // only repeat requests once
-  maxDelaySeconds: 5, // fail immediately if we have to wait >5 seconds
+  maxRetryAttempts: 1, 
+  maxDelaySeconds: 5,
 }));
+
+bot.use(
+  limit({
+    timeFrame: 1000,
+    limit: 2,
+
+    onLimitExceeded: async (ctx) => {
+      await ctx.reply("Не так часто!");
+    },
+
+    keyGenerator: (ctx) => {
+      return ctx.from?.id.toString();
+    },
+  })
+);
+
 bot.api.config.use(parseMode("HTML"));
 bot.use(i18n);
 bot.use(session({ initial: (): SessionData => ({ isFreshGroups: [] }) }))
@@ -67,14 +85,13 @@ bot.use(conversations());
 bot.use(setUser);
 bot.use(updateName);
 bot.use(addRef);
-bot.use(log);
+bot.use(createConversation(broadcastConservation));
 
 bot.command("profile", profile);
 
 bot.command("help", async (ctx) => {
   await ctx.api.sendMessage(ctx.chatId, ctx.t("help"))
 })
-
 
 const privateBot = bot.chatType('private');
 
@@ -83,6 +100,10 @@ privateBot.command("start", async (ctx) => {
 })
 
 privateBot.command("stat", isAdmin, stat);
+privateBot.command("bc", isAdmin, async (ctx) => {
+  await ctx.conversation.enter("broadcastConservation");
+});
+privateBot.callbackQuery("cancel_bc", cancel_bc);
 
 privateBot.on(":text", async (ctx) => {
   await ctx.api.sendMessage(ctx.chatId, ctx.t("chatWarn"), { reply_markup: keyboard(ctx.from.id) })
