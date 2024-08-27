@@ -7,7 +7,7 @@ export const setGroupUser: Middleware<MyContext> = async (ctx, next) => {
   let groupUser = await GroupUser.findOne({ user_id: ctx.from?.id, group_id: ctx.chatId });
 
   if (!groupUser) {
-    saveDoc(new GroupUser({
+    await saveDoc(new GroupUser({
       user_id: ctx.from?.id,
       group_id: ctx.chatId
     }))

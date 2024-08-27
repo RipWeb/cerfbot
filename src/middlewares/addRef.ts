@@ -25,7 +25,7 @@ export const addRef: Middleware<MyContext> = async (ctx, next) => {
       if (ref) {
         await Ref.updateOne({ name: refCode }, { $inc: { count }, $set: { lastUsage: date } })
       } else {
-        saveDoc(new Ref({
+        await saveDoc(new Ref({
           firstUsage: date,
           lastUsage: date,
           name: refCode,
