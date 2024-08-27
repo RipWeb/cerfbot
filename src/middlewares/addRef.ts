@@ -39,9 +39,15 @@ export const addRef: Middleware<MyContext> = async (ctx, next) => {
     ? 1
     : 0
     ctx.session.isFreshGroups = ctx.session.isFreshGroups?.filter((id) => id !== ctx.chat?.id);
+
     if (count === 1){
-      await User.updateOne({ id: refCode }, { $inc: { group_count: count, charge: 1 } });
-      await ctx.api.sendMessage(refCode, "<b>+ 1 попытка за добавление бота в группу, добавляй бота в другие группы и получай больше попыток!</b>");
+      const memberCount = await ctx.api.getChatMemberCount(ctx.chat.id);
+      if (memberCount > 30){
+        await User.updateOne({ id: refCode }, { $inc: { group_count: 1, charge: 1 } });
+        await ctx.api.sendMessage(refCode, "<b>+ 1 попытка за добавление бота в группу, добавляй бота в другие группы и получай больше попыток!</b>");
+      } else {
+        await ctx.api.sendMessage(refCode, "<b>вы добавили бота в группу, дял того чтобы получить попытку в ней должно быть хотя бы 30 участников!</b>");
+      }
     }
   }
 }

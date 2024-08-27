@@ -29,7 +29,6 @@ import { updateName } from "./middlewares/updateName";
 import profile from "./actions/profile";
 import stat from "./actions/admin/stat";
 import { broadcastConservation, cancel_bc } from "./actions/admin/broadcast";
-import sliceTop from "./services/slice";
 
 mongoose
   .connect(config.URI, {enableUtf8Validation: false})
@@ -58,12 +57,14 @@ const commandsGroup: BotCommand[] = [
 const bot = new Bot<MyContext>(config.TOKEN);
 bot.api.setMyCommands(commandsPrivate, { scope: { type: "all_private_chats" } })
 bot.api.setMyCommands(commandsGroup, { scope: { type: "all_group_chats" } })
-bot.api.config.use(autoRetry());
+bot.api.config.use(
+  autoRetry({ rethrowInternalServerErrors: true, maxRetryAttempts: 5, maxDelaySeconds: 2500 }),
+);
 
 bot.use(
   limit({
     timeFrame: 1000,
-    limit: 2,
+    limit: 1,
 
     onLimitExceeded: async (ctx) => {
       await ctx.reply("не так часто!");
