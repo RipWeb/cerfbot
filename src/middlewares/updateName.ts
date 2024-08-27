@@ -23,11 +23,11 @@ export const updateName: Middleware<MyContext> = async (ctx, next) => {
       })
   }
 
-  if (group?.title)
+  if (group?.title && ctx.chat?.title)
     if (group.title.slice(0, 30) !== ctx.chat?.title || group.username !== ctx.chat?.username){
-      await Group.updateOne({ id: ctx.from?.id }, 
-        { title: ctx.from?.first_name.slice(0, 30),
-          username: ctx.from?.username
+      await Group.updateOne({ id: ctx.chat?.id }, 
+        { title: ctx.chat.title.slice(0, 30),
+          username: ctx.chat.username
         })
     }
 } 
