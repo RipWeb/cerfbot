@@ -123,7 +123,9 @@ bot.on("my_chat_member", myChatMember);
 
 run(bot);
 
-const scheduler = new ToadScheduler()
+silceTop();
+
+const scheduler = new ToadScheduler();
 
 scheduler.addCronJob(
   new CronJob(
@@ -136,3 +138,7 @@ scheduler.addCronJob(
     }
   )
 )
+
+function silceTop() {
+  throw new Error("Function not implemented.");
+}
