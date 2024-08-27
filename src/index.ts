@@ -29,6 +29,7 @@ import { updateName } from "./middlewares/updateName";
 import profile from "./actions/profile";
 import stat from "./actions/admin/stat";
 import { broadcastConservation, cancel_bc } from "./actions/admin/broadcast";
+import sliceTop from "./services/slice";
 
 mongoose
   .connect(config.URI, {enableUtf8Validation: false})
@@ -123,9 +124,9 @@ bot.on("my_chat_member", myChatMember);
 
 run(bot);
 
-silceTop();
-
 const scheduler = new ToadScheduler();
+
+sliceTop();
 
 scheduler.addCronJob(
   new CronJob(
@@ -138,7 +139,3 @@ scheduler.addCronJob(
     }
   )
 )
-
-function silceTop() {
-  throw new Error("Function not implemented.");
-}

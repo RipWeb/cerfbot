@@ -1,11 +1,8 @@
 import { Api } from "grammy";
 import { Group } from "../models/group";
 import { User } from "../models/user";
-import { GroupUser } from "../models/groupUser";
 
-export default async function sliceTop(
-  api: Api
-): Promise<void> {
+export default async function sliceTop(): Promise<void> {
   const users = await User.find();
   for (const user of users) {
     if(user.first_name)
