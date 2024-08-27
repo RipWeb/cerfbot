@@ -58,10 +58,7 @@ const commandsGroup: BotCommand[] = [
 const bot = new Bot<MyContext>(config.TOKEN);
 bot.api.setMyCommands(commandsPrivate, { scope: { type: "all_private_chats" } })
 bot.api.setMyCommands(commandsGroup, { scope: { type: "all_group_chats" } })
-bot.api.config.use(autoRetry({
-  maxRetryAttempts: 1, 
-  maxDelaySeconds: 5,
-}));
+bot.api.config.use(autoRetry());
 
 bot.use(
   limit({
