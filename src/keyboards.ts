@@ -6,7 +6,12 @@ export const keyboard = (user_id: number) => {
   .url('😜 добавить бота в свой чат', `https://t.me/${config.USERNAME}/?startgroup=group-${user_id}`);
 }
 
-export const cancelBC= () => {
+export const cancelBC = () => {
   return new InlineKeyboard()
   .text("❌ Отменить", "cancel_bc");
+}
+
+export const backup = () => {
+  return new InlineKeyboard()
+  .text("📩 Выгрузить .txt", "backup");
 }

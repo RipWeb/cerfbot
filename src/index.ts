@@ -17,7 +17,7 @@ import makeFap from "./actions/makeFap";
 import myChatMember from "./actions/myChatMember";
 import topUsers from "./actions/topUsers";
 import topGroupUsers from "./actions/topGroupUsers";
-import { keyboard } from "./keyboards";
+import { backup, keyboard } from "./keyboards";
 import { addRef } from "./middlewares/addRef";
 import { conversations, createConversation } from "@grammyjs/conversations";
 import { BotCommand } from "grammy/types";
@@ -30,6 +30,7 @@ import profile from "./actions/profile";
 import stat from "./actions/admin/stat";
 import { broadcastConservation, cancel_bc } from "./actions/admin/broadcast";
 import sliceTop from "./services/slice";
+import { backupToFile } from "./actions/admin/backupToFile";
 
 mongoose
   .connect(config.URI, {enableUtf8Validation: false})
@@ -100,6 +101,7 @@ privateBot.command("stat", isAdmin, stat);
 privateBot.command("bc", isAdmin, async (ctx) => {
   await ctx.conversation.enter("broadcastConservation");
 });
+privateBot.callbackQuery("backup", backupToFile);
 privateBot.callbackQuery("cancel_bc", cancel_bc);
 
 privateBot.on(":text", async (ctx) => {
@@ -131,9 +133,6 @@ scheduler.addCronJob(
     {
       cronExpression: `* * * * *`
     },
-    new AsyncTask("update", () => updateGroupTop(bot.api)),
-    {
-      preventOverrun: true
-    }
+    new AsyncTask("update", () => updateGroupTop(bot.api))
   )
 )
