@@ -115,6 +115,8 @@ run(bot);
 
 const scheduler = new ToadScheduler();
 
+sliceTop();
+
 scheduler.addCronJob(
   new CronJob(
     {
