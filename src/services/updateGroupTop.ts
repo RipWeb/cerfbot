@@ -6,40 +6,30 @@ import { GroupUser } from "../models/groupUser";
 export default async function updateGroupTop(
   api: Api
 ): Promise<void> {
-  const start: any = new Date()
+  const start: any = new Date();
+  // 1. Получение данных из GroupUser:
   const groupUsers = await GroupUser.find().sort({ group_id: -1 });
 
-  const result: any = {};
+  // 2. Создание объекта для хранения суммарной "dick_len" для каждой группы:
+  const groupDickLens = {};
 
-  for (const item of groupUsers) {
-    const { user_id, group_id } = item;
-  
-    if (!result[group_id]) {
-      result[group_id] = [];
+  // 3. Получение массива пользователей и создание мапы для хранения dick_len для каждого пользователя:
+  const users = await User.find(); // Получение массива документов
+  const userDickLens = users.reduce((map, user) => {
+    map[user.id] = user.dick_len;
+    return map;
+  }, {});
+
+  // 4. Подсчет суммарной "dick_len" для каждой группы:
+  for (const { user_id, group_id } of groupUsers) {
+    if (!groupDickLens[group_id]) {
+      groupDickLens[group_id] = 0;
     }
-  
-    result[group_id].push(user_id);
-  }
-  const users = await User.find();
-  for (const key in result) {
-    for (let i = 0; i < result[key].length; i++){
-      for (const item of users){
-        if (result[key][i] === item.id){
-          result[key][i] = item.dick_len;
-        }
-      }
-    }
-  }
-  
-  for (const key in result) {
-    const total = result[key].reduce(
-      (acc: number, cur: number) => acc + cur,
-      0,
-    );
-    result[key] = total;
+    groupDickLens[group_id] += userDickLens[user_id]; // Используем мапу userDickLens для быстрого получения значения
   }
 
-  const updateOperations = Object.entries(result).map(([groupId, dickLen]) => ({
+  // 5. Обновление документов Group:
+  const updateOperations = Object.entries(groupDickLens).map(([groupId, dickLen]) => ({
     updateOne: {
       filter: { id: parseInt(groupId) },
       update: { $set: { totalDickLen: dickLen } }
@@ -48,6 +38,5 @@ export default async function updateGroupTop(
 
   await Group.bulkWrite(updateOperations);
   const end: any = new Date();
-  console.log("Time:", end - start);
-
+  console.log("Time:", end - start)
 }

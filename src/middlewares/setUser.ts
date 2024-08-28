@@ -2,6 +2,7 @@ import { Middleware } from "grammy";
 import { MyContext } from "../typings/context";
 import { User } from "../models/user";
 import { saveDoc } from "../helpers/saveDoc";
+import { convertChars } from "../helpers/convertChars";
 
 export const setUser: Middleware<MyContext> = async (ctx, next) => {
   let user = await User.findOne({ id: ctx.from?.id });
@@ -16,7 +17,7 @@ export const setUser: Middleware<MyContext> = async (ctx, next) => {
     await saveDoc(new User({
       id: ctx.from?.id,
       username: ctx.from?.username,
-      first_name: ctx.from?.first_name.slice(0, 25),
+      first_name: convertChars(ctx.from.first_name.slice(0, 25)),
       ref_name: ctx.message?.text?.split(" ")[1] || null,
       alive: status
     }));
