@@ -18,6 +18,8 @@ export async function backupToFile(ctx: MyContext) {
 
     await fs.writeFile("./ids.txt", usersContent);
     await fs.appendFile("./ids.txt", groupsContent);
+    if (ctx.from)
+      await ctx.api.sendDocument(ctx.from?.id, './ids.txt')
   } catch (error) {
     console.error("Error saving user IDs:", error);
   }
