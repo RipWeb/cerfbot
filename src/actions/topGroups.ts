@@ -6,7 +6,7 @@ export default async function topGroups(ctx: MyContext) {
   const group = await Group.findOne({ id: ctx.chat.id })
   .sort({ totalDickLen: -1, _id: 1 })
   .limit(20);
-  const rank = await Group.countDocuments({ dick_len: { $gt: group.totalDickLen } }) + 1;
+  const rank = await Group.countDocuments({ totalDickLen: { $gt: group.totalDickLen } }) + 1;
 
   let text = '<b>топ чатов 💬</b>\n\n';
   for (let i = 0; i < topGroups.length; i++){
