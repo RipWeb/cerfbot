@@ -1,3 +1,4 @@
+import { InputFile } from "grammy";
 import { Group } from "../../models/group";
 import { User } from "../../models/user";
 import { MyContext } from "../../typings/context";
@@ -19,7 +20,7 @@ export async function backupToFile(ctx: MyContext) {
     await fs.writeFile("./ids.txt", usersContent);
     await fs.appendFile("./ids.txt", groupsContent);
     if (ctx.from)
-      await ctx.api.sendDocument(ctx.from?.id, './ids.txt')
+      await ctx.api.sendDocument(ctx.from?.id, new InputFile('./ids.txt'))
   } catch (error) {
     console.error("Error saving user IDs:", error);
   }
