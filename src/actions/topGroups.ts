@@ -2,10 +2,10 @@ import { MyContext } from "../typings/context";
 import { Group } from "../models/group";
 
 export default async function topGroups(ctx: MyContext) {
-  const topGroups = await Group.find();
-  const group = await Group.findOne({ id: ctx.chat.id })
+  const topGroups = await Group.find()
   .sort({ totalDickLen: -1, _id: 1 })
   .limit(20);
+  const group = await Group.findOne({ id: ctx.chat.id });
   const rank = await Group.countDocuments({ totalDickLen: { $gt: group.totalDickLen } }) + 1;
 
   let text = '<b>топ чатов 💬</b>\n\n';
