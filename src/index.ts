@@ -6,7 +6,6 @@ import { MyContext, SessionData } from "./typings/context";
 import config from "./typings/config";
 import { run } from "@grammyjs/runner";
 import { autoRetry } from "@grammyjs/auto-retry";
-import { limit } from "@grammyjs/ratelimiter";
 
 import { setGroup } from "./middlewares/setGroup";
 import { isAdmin } from "./middlewares/isAdmin";
@@ -17,7 +16,7 @@ import makeFap from "./actions/makeFap";
 import myChatMember from "./actions/myChatMember";
 import topUsers from "./actions/topUsers";
 import topGroupUsers from "./actions/topGroupUsers";
-import { backup, keyboard } from "./keyboards";
+import { main_kb } from "./helpers/keyboards";
 import { addRef } from "./middlewares/addRef";
 import { conversations, createConversation } from "@grammyjs/conversations";
 import { BotCommand } from "grammy/types";
@@ -29,7 +28,6 @@ import { updateName } from "./middlewares/updateName";
 import profile from "./actions/profile";
 import stat from "./actions/admin/stat";
 import { broadcastConservation, cancel_bc } from "./actions/admin/broadcast";
-import sliceTop from "./services/slice";
 import { backupToFile } from "./actions/admin/backupToFile";
 import { log } from "./middlewares/log";
 
@@ -81,7 +79,7 @@ bot.command("help", async (ctx) => {
 const privateBot = bot.chatType('private');
 
 privateBot.command("start", async (ctx) => {
-  await ctx.api.sendMessage(ctx.chatId, ctx.t("start"), { reply_markup: keyboard(ctx.from.id) })
+  await ctx.api.sendMessage(ctx.chatId, ctx.t("start"), { reply_markup: main_kb(ctx.from.id) })
 })
 
 privateBot.command("stat", isAdmin, stat);
@@ -92,7 +90,7 @@ privateBot.callbackQuery("backup", backupToFile);
 privateBot.callbackQuery("cancel_bc", cancel_bc);
 
 privateBot.on(":text", async (ctx) => {
-  await ctx.api.sendMessage(ctx.chatId, ctx.t("chatWarn"), { reply_markup: keyboard(ctx.from.id) })
+  await ctx.api.sendMessage(ctx.chatId, ctx.t("chatWarn"), { reply_markup: main_kb(ctx.from.id) })
 })
 
 const groupBot = bot.chatType(['group', 'supergroup']);
@@ -100,7 +98,7 @@ groupBot.use(setGroup);
 groupBot.use(setGroupUser);
 
 groupBot.command("start", async (ctx) => {
-  await ctx.api.sendMessage(ctx.chatId, ctx.t("start"), { reply_markup: keyboard(ctx.from.id) })
+  await ctx.api.sendMessage(ctx.chatId, ctx.t("start"), { reply_markup: main_kb(ctx.from.id) })
 });
 
 groupBot.command("fap", makeFap);
@@ -114,8 +112,6 @@ bot.on("my_chat_member", myChatMember);
 run(bot);
 
 const scheduler = new ToadScheduler();
-
-sliceTop();
 
 scheduler.addCronJob(
   new CronJob(

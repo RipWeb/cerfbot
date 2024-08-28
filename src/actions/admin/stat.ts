@@ -1,4 +1,4 @@
-import { backup } from "../../keyboards";
+import { backup_kb } from "../../helpers/keyboards";
 import { Group } from "../../models/group";
 import { User } from "../../models/user";
 import { MyContext } from "../../typings/context";
@@ -17,5 +17,5 @@ export default async function stat(ctx: MyContext) {
 
 Групп: ${groups}
 живых: ${groupsAlive}
-мертвых: ${groups - groupsAlive}`, { reply_markup: backup() });
+мертвых: ${groups - groupsAlive}`, { reply_markup: backup_kb() });
 }

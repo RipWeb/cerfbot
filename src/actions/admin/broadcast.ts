@@ -1,4 +1,4 @@
-import { cancelBC } from "../../keyboards";
+import { cancel_bc_kb } from "../../helpers/keyboards";
 import { User } from "../../models/user";
 import { MyContext } from "../../typings/context";
 import { Conversation } from "@grammyjs/conversations"
@@ -11,12 +11,12 @@ async function broadcast(ctx: MyContext, message_id: number) {
     const users = await User.find({ alive: true });
     let count = 0;
     let reject = 0;
-    const mes = await ctx.api.sendMessage(ctx.chat.id, `Рассылка началась!\n\nОтправлено: ${count}`, { reply_markup: cancelBC() })
+    const mes = await ctx.api.sendMessage(ctx.chat.id, `Рассылка началась!\n\nОтправлено: ${count}`, { reply_markup: cancel_bc_kb() })
       for (const user of users){
           if (isAllowed){
             count++;
             if (count % 500 === 0){
-              await ctx.api.editMessageText(ctx.chat.id, mes.message_id, `Рассылка идет!\n\nОтправлено: ${count}`, { reply_markup: cancelBC() })
+              await ctx.api.editMessageText(ctx.chat.id, mes.message_id, `Рассылка идет!\n\nОтправлено: ${count}`, { reply_markup: cancel_bc_kb() })
             }
             try {
               await ctx.api.copyMessage(user.id, ctx.from.id, message_id);
