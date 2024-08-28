@@ -31,6 +31,7 @@ import stat from "./actions/admin/stat";
 import { broadcastConservation, cancel_bc } from "./actions/admin/broadcast";
 import sliceTop from "./services/slice";
 import { backupToFile } from "./actions/admin/backupToFile";
+import { log } from "./middlewares/log";
 
 mongoose
   .connect(config.URI, {enableUtf8Validation: false})
@@ -63,23 +64,9 @@ bot.api.config.use(
   autoRetry({ rethrowInternalServerErrors: true, maxRetryAttempts: 5, maxDelaySeconds: 2500 }),
 );
 
-bot.use(
-  limit({
-    timeFrame: 1000,
-    limit: 1,
-
-    onLimitExceeded: async (ctx) => {
-      await ctx.reply("не так часто!");
-    },
-
-    keyGenerator: (ctx) => {
-      return ctx.from?.id.toString();
-    },
-  })
-);
-
 bot.api.config.use(parseMode("HTML"));
 bot.use(i18n);
+bot.use(log);
 bot.use(session({ initial: (): SessionData => ({ isFreshGroups: [] }) }))
 bot.use(conversations());
 bot.use(setUser);

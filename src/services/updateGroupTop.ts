@@ -6,6 +6,7 @@ import { GroupUser } from "../models/groupUser";
 export default async function updateGroupTop(
   api: Api
 ): Promise<void> {
+  const start: any = new Date()
   const groupUsers = await GroupUser.find().sort({ group_id: -1 });
 
   const result: any = {};
@@ -46,4 +47,7 @@ export default async function updateGroupTop(
   }));
 
   await Group.bulkWrite(updateOperations);
+  const end: any = new Date();
+  console.log("Time:", end - start);
+
 }
