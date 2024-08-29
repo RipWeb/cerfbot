@@ -2,6 +2,7 @@ import { Bot, session } from "grammy";
 import { parseMode } from "@grammyjs/parse-mode";;
 import { I18n } from "@grammyjs/i18n";
 import mongoose from 'mongoose';
+import { Redis } from "ioredis";
 import { MyContext, SessionData } from "./typings/context";
 import config from "./typings/config";
 import { run } from "@grammyjs/runner";
@@ -30,6 +31,11 @@ import stat from "./actions/admin/stat";
 import { broadcastConservation, cancel_bc } from "./actions/admin/broadcast";
 import { backupToFile } from "./actions/admin/backupToFile";
 import { log } from "./middlewares/log";
+
+function getSessionKey(ctx: MyContext): string | undefined {
+  return ctx.from?.id.toString();
+}
+
 
 mongoose
   .connect(config.URI, {enableUtf8Validation: false})
@@ -64,9 +70,9 @@ bot.api.config.use(
 
 bot.api.config.use(parseMode("HTML"));
 bot.use(i18n);
-bot.use(log);
-bot.use(session({ initial: (): SessionData => ({ isFreshGroups: [] }) }))
+bot.use(session({ initial: (): SessionData => ({ isFreshGroups: [] }), getSessionKey }))
 bot.use(conversations());
+bot.use(log);
 bot.use(setUser);
 bot.use(updateName);
 bot.use(addRef);

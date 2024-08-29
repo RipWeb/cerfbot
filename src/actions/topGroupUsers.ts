@@ -11,8 +11,8 @@ export default async function topGroupUsers(ctx: MyContext) {
   }
 
   const topUsers = await User.find({ id: { $in: GroupUsers }})    
-  .sort({ dick_len: -1, _id: 1 })
-  .limit(20);
+    .sort({ dick_len: -1, _id: 1 })
+    .limit(20);
 
   let text = '<b>топ чата 🐭</b>\n\n';
   for (let i = 0; i < topUsers.length; i++){

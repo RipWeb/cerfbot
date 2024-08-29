@@ -15,9 +15,7 @@ export default async function topUsers(ctx: MyContext) {
   for (let i = 0; i < topUsers.length; i++) {
     text += `<b>${i + 1}. <a href="tg://openmessage?user_id=${topUsers[i].id}">${topUsers[i].first_name}</a> | ${topUsers[i].dick_len} см.</b>\n`;
   }
-  text += `\n<b>Вы: \n${rank}. <a href="tg://user?id=${user.id}">${user.first_name}</a> | ${user.dick_len} см.</b>`;
+  text += `\n<b>вы: \n${rank}. <a href="tg://user?id=${user.id}">${user.first_name}</a> | ${user.dick_len} см.</b>`;
 
-  if (ctx.chat) {
-    await ctx.api.sendMessage(ctx.chat.id, text);
-  }
+  await ctx.api.sendMessage(ctx.chat.id, text);
 }

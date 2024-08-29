@@ -1,14 +1,25 @@
 services:
   mongo_db:
-    container_name: database_container
+    container_name: mongodb
     image: mongo:latest
     restart: always
     ports:
       - 127.0.0.1:2717:27017
     volumes:
       - mongo_db:/data/db
+  
+  redis:
+    container_name: redis
+    image: redis:6.2-alpine 
+    ports:
+      - "127.0.0.1:6379:6379"
+    restart: always
+    volumes:
+      - redis_data:/data 
+    command: redis-server --appendonly yes 
 
   app:
+    container_name: app
     image: ripweb/my-bot:latest
     build: .
     restart: always
@@ -16,7 +27,13 @@ services:
       - .env
     depends_on:
       - mongo_db
+      - redis
 
 volumes:
   mongo_db:
     name: "mongo_db"
+  redis_data:
+    name: "redis_data"
+
+networks:
+  my_network:

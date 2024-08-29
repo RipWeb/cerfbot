@@ -6,7 +6,7 @@ import { convertChars } from "../helpers/convertChars";
 
 export const setUser: Middleware<MyContext> = async (ctx, next) => {
   let user = await User.findOne({ id: ctx.from?.id });
-  
+
   if (!user) {
     let status = true;
     if (ctx.chat?.type !== "private"){
