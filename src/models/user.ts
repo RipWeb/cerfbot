@@ -14,6 +14,8 @@ const userSchema = new Schema({
   alive: { default: true, type: Boolean},
   dick_len: { default: 1, type: Number},
   last_fap: { default: yesterday, type: Date},
+  rating: { default: 0, type: Number},
+  gems: { default: 0, type: Number},
 });
 
 export type IUser = InferSchemaType<typeof userSchema>;

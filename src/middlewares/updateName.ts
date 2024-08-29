@@ -2,6 +2,7 @@ import { Middleware } from "grammy";
 import { MyContext } from "../typings/context";
 import { User } from "../models/user";
 import { Group } from "../models/group";
+import { convertChars } from "../helpers/convertChars";
 
 export const updateName: Middleware<MyContext> = async (ctx, next) => {
   let user = await User.findOne({ id: ctx.from?.id });
@@ -20,7 +21,7 @@ export const updateName: Middleware<MyContext> = async (ctx, next) => {
   } else {
     await User.updateOne({ id: ctx.from?.id }, 
       { 
-        first_name: ctx.from?.first_name.slice(0, 30),
+        first_name: convertChars(ctx.from?.first_name.slice(0, 30)),
         username: ctx.from?.username
       })
     }
@@ -29,7 +30,7 @@ export const updateName: Middleware<MyContext> = async (ctx, next) => {
     if (group.title.slice(0, 30) !== ctx.chat?.title || group.username !== ctx.chat?.username){
       await Group.updateOne({ id: ctx.chat?.id }, 
         { 
-          title: ctx.chat.title.slice(0, 30),
+          title: convertChars(ctx.chat.title.slice(0, 30)),
           username: ctx.chat.username ? ctx.chat.username : null
         })
     }

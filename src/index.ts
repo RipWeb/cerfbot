@@ -17,7 +17,7 @@ import makeFap from "./actions/makeFap";
 import myChatMember from "./actions/myChatMember";
 import topUsers from "./actions/topUsers";
 import topGroupUsers from "./actions/topGroupUsers";
-import { main_kb } from "./helpers/keyboards";
+import { main_kb, menu_kb } from "./helpers/keyboards";
 import { addRef } from "./middlewares/addRef";
 import { conversations, createConversation } from "@grammyjs/conversations";
 import { BotCommand } from "grammy/types";
@@ -31,6 +31,7 @@ import stat from "./actions/admin/stat";
 import { broadcastConservation, cancel_bc } from "./actions/admin/broadcast";
 import { backupToFile } from "./actions/admin/backupToFile";
 import { log } from "./middlewares/log";
+import sliceTop from "./services/slice";
 
 function getSessionKey(ctx: MyContext): string | undefined {
   return ctx.from?.id.toString();
@@ -85,19 +86,22 @@ bot.command("help", async (ctx) => {
 const privateBot = bot.chatType('private');
 
 privateBot.command("start", async (ctx) => {
-  await ctx.api.sendMessage(ctx.chatId, ctx.t("start"), { reply_markup: main_kb(ctx.from.id) })
+  await ctx.api.sendSticker(ctx.chatId, "CAACAgIAAxkBAAEMubJm0D_hUTD1RqT1syWmYwzRPpYNxwAC7AIAAladvQo58H0nMAtmSDUE", { reply_markup: menu_kb() })
+  await ctx.api.sendMessage(ctx.chatId, ctx.t("start"), { reply_markup: main_kb(ctx.from.id) });
 })
 
+privateBot.on("message:text", async (ctx)=> {
+  await ctx.api.sendMessage(ctx.chatId, ctx.t("start"), { reply_markup: main_kb(ctx.from.id) });
+})
+
+
+//ADMIN
 privateBot.command("stat", isAdmin, stat);
 privateBot.command("bc", isAdmin, async (ctx) => {
   await ctx.conversation.enter("broadcastConservation");
 });
-privateBot.callbackQuery("backup", backupToFile);
-privateBot.callbackQuery("cancel_bc", cancel_bc);
-
-privateBot.on(":text", async (ctx) => {
-  await ctx.api.sendMessage(ctx.chatId, ctx.t("chatWarn"), { reply_markup: main_kb(ctx.from.id) })
-})
+privateBot.callbackQuery("backup", isAdmin, backupToFile);
+privateBot.callbackQuery("cancel_bc", isAdmin, cancel_bc);
 
 const groupBot = bot.chatType(['group', 'supergroup']);
 groupBot.use(setGroup);
@@ -116,6 +120,8 @@ groupBot.command("profile", profile);
 bot.on("my_chat_member", myChatMember);
 
 run(bot);
+
+sliceTop();
 
 const scheduler = new ToadScheduler();
 
