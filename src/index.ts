@@ -121,8 +121,6 @@ bot.on("my_chat_member", myChatMember);
 
 run(bot);
 
-sliceTop();
-
 const scheduler = new ToadScheduler();
 
 scheduler.addCronJob(
