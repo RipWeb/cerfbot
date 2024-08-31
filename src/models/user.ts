@@ -16,6 +16,7 @@ const userSchema = new Schema({
   last_fap: { default: yesterday, type: Date},
   rating: { default: 0, type: Number},
   gems: { default: 0, type: Number},
+  char_id: { default: 0, type: Number},
 });
 
 export type IUser = InferSchemaType<typeof userSchema>;

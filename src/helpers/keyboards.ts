@@ -21,6 +21,17 @@ export const cancel_bc_kb = () => {
   .text("❌ Отменить", "cancel_bc");
 }
 
+export const attack_kb = () => {
+  return new InlineKeyboard()
+  .text("Атаковать ⚔️", "attack");
+}
+
+export const cancel_search_kb = () => {
+  return new InlineKeyboard()
+  .text("❌ Отменить поиск", "cancel_search");
+}
+
+
 export const backup_kb = () => {
   return new InlineKeyboard()
   .text("📩 Выгрузить .txt", "backup");

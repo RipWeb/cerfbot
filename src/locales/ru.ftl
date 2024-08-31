@@ -37,4 +37,11 @@ profile =  <b>{ $name }</b>
   { $dick_len } см.
   доп. попыток: { $charge }
 
+fight = <b>{ $name }</b> | { $rating } elo
+  🎭 { $char_name } ❤️ { $health } 
+  🔫 { $damage } 🛡 { $armor } 
+
+
+
+
 

@@ -31,12 +31,14 @@ import stat from "./actions/admin/stat";
 import { broadcastConservation, cancel_bc } from "./actions/admin/broadcast";
 import { backupToFile } from "./actions/admin/backupToFile";
 import { log } from "./middlewares/log";
-import sliceTop from "./services/slice";
+import findEnemy, { cancel_search } from "./actions/findEnemy";
+import { attack } from "./actions/attack";
 
 function getSessionKey(ctx: MyContext): string | undefined {
   return ctx.from?.id.toString();
 }
 
+export const redis = new Redis();
 
 mongoose
   .connect(config.URI, {enableUtf8Validation: false})
@@ -49,7 +51,6 @@ const i18n = new I18n<MyContext>({
 });
 
 const commandsPrivate: BotCommand[] = [
-  { command: "start", description: "играть" },
   { command: "help", description: "помощь" },
   { command: "profile", description: "профиль" },
 ];
@@ -65,9 +66,10 @@ const commandsGroup: BotCommand[] = [
 const bot = new Bot<MyContext>(config.TOKEN);
 bot.api.setMyCommands(commandsPrivate, { scope: { type: "all_private_chats" } })
 bot.api.setMyCommands(commandsGroup, { scope: { type: "all_group_chats" } })
-bot.api.config.use(
-  autoRetry({ rethrowInternalServerErrors: true, maxRetryAttempts: 5, maxDelaySeconds: 2500 }),
-);
+bot.api.config.use(autoRetry({ 
+  rethrowInternalServerErrors: true, 
+  maxRetryAttempts: 5, 
+  maxDelaySeconds: 2500 }));
 
 bot.api.config.use(parseMode("HTML"));
 bot.use(i18n);
@@ -90,10 +92,9 @@ privateBot.command("start", async (ctx) => {
   await ctx.api.sendMessage(ctx.chatId, ctx.t("start"), { reply_markup: main_kb(ctx.from.id) });
 })
 
-privateBot.on("message:text", async (ctx)=> {
-  await ctx.api.sendMessage(ctx.chatId, ctx.t("start"), { reply_markup: main_kb(ctx.from.id) });
-})
-
+// privateBot.hears("🎯 В бой", findEnemy);
+// privateBot.callbackQuery("cancel_search", cancel_search);
+// privateBot.callbackQuery("attack", attack);
 
 //ADMIN
 privateBot.command("stat", isAdmin, stat);
@@ -102,6 +103,10 @@ privateBot.command("bc", isAdmin, async (ctx) => {
 });
 privateBot.callbackQuery("backup", isAdmin, backupToFile);
 privateBot.callbackQuery("cancel_bc", isAdmin, cancel_bc);
+
+privateBot.on(":text", async (ctx: MyContext) => {
+  await ctx.api.sendMessage(ctx.from.id, ctx.t("chatWarn"), { reply_markup: main_kb(ctx.from.id) });
+})
 
 const groupBot = bot.chatType(['group', 'supergroup']);
 groupBot.use(setGroup);
