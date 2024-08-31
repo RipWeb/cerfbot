@@ -5,6 +5,7 @@ const configSchema = z.object({
   TOKEN: z.string(),
   URI: z.string(),
   USERNAME: z.string(),
+  REDIS_HOST: z.string(),
   ADMINS: z.string().transform((str) => str.split(' ').map(str => Number(str)))
 })
 

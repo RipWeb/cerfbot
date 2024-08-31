@@ -38,7 +38,7 @@ function getSessionKey(ctx: MyContext): string | undefined {
   return ctx.from?.id.toString();
 }
 
-// export const redis = new Redis();
+export const redis = new Redis({ host: config.REDIS_HOST});
 
 mongoose
   .connect(config.URI, {enableUtf8Validation: false})
